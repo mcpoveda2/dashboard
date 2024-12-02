@@ -28,7 +28,7 @@ const rows = [
 export default function BasicTable() {
     return (
     <TableContainer component={Paper}>
-        <Table aria-label="simple table">
+        <Table  aria-label="simple table">
         <TableHead>
           <TableRow>
             <TableCell>Dessert (100g serving)</TableCell>
