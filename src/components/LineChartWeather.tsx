@@ -17,7 +17,7 @@ import { LineChart } from '@mui/x-charts/LineChart';
      return (
          <Paper
              sx={{
-                 p: 2,s
+                 p: 2,
                  display: 'flex',
                  flexDirection: 'column'
              }}
