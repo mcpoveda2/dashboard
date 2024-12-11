@@ -1,4 +1,4 @@
-
+import React, { useState, useEffect } from 'react';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
@@ -7,50 +7,78 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 
-function createData(
-    name: string,
-    calories: number,
-    fat: number,
-    carbs: number,
-    protein: number,
-) {
-  return { name, calories, fat, carbs, protein };
+interface WeatherRow {
+  startTime: string;
+  endTime: string;
+  precipitation: string;
+  humidity: string;
+  cloudiness: string;
 }
 
-const rows = [
-    createData('Frozen yoghurt', 159, 6.0, 24, 4.0),
-    createData('Ice cream sandwich', 237, 9.0, 37, 4.3),
-    createData('Eclair', 262, 16.0, 24, 6.0),
-    createData('Cupcake', 305, 3.7, 67, 4.3),
-    createData('Gingerbread', 356, 16.0, 49, 3.9),
-];
+export default function WeatherTable() {
+  const [rows, setRows] = useState<WeatherRow[]>([]);
 
-export default function BasicTable() {
-    return (
+  useEffect(() => {
+    const fetchWeatherData = async () => {
+      try {
+        const response = await fetch(
+          'https://api.openweathermap.org/data/2.5/forecast?q=Guayaquil&mode=xml&appid=aeff831bd7123ebe005c7dadc1022124&units=metric'
+        );
+        const textXML = await response.text();
+        const parser = new DOMParser();
+        const xml = parser.parseFromString(textXML, 'application/xml');
+
+        const data = Array.from(xml.getElementsByTagName('time')).map((timeNode) => {
+          const startTime = timeNode.getAttribute('from')?.split('T')[1] || 'N/A';
+          const endTime = timeNode.getAttribute('to')?.split('T')[1] || 'N/A';
+          const precipitation = timeNode.querySelector('precipitation')?.getAttribute('probability') || '0';
+          const humidity = timeNode.querySelector('humidity')?.getAttribute('value') || 'N/A';
+          const cloudiness = timeNode.querySelector('clouds')?.getAttribute('value') || 'N/A';
+
+          return {
+            startTime,
+            endTime,
+            precipitation,
+            humidity,
+            cloudiness,
+          };
+        });
+
+        const data2 = data.slice(-6);
+        setRows(data2);
+      } catch (error) {
+        console.error('Error fetching weather data:', error);
+      }
+    };
+
+    fetchWeatherData();
+  }, []);
+
+  return (
     <TableContainer component={Paper}>
-        <Table  aria-label="simple table">
+      <Table aria-label="weather table">
         <TableHead>
           <TableRow>
-            <TableCell>Dessert (100g serving)</TableCell>
-            <TableCell align="right">Calories</TableCell>
-            <TableCell align="right">Fat&nbsp;(g)</TableCell>
-            <TableCell align="right">Carbs&nbsp;(g)</TableCell>
-            <TableCell align="right">Protein&nbsp;(g)</TableCell>
+            <TableCell>Hora de inicio</TableCell>
+            <TableCell align="right">Hora de fin</TableCell>
+            <TableCell align="right">Precipitación</TableCell>
+            <TableCell align="right">Humedad</TableCell>
+            <TableCell align="right">Nubosidad</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {rows.map((row, index) => (
             <TableRow
-              key={row.name}
+              key={index}
               sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
             >
               <TableCell component="th" scope="row">
-                {row.name}
+                {row.startTime}
               </TableCell>
-              <TableCell align="right">{row.calories}</TableCell>
-              <TableCell align="right">{row.fat}</TableCell>
-              <TableCell align="right">{row.carbs}</TableCell>
-              <TableCell align="right">{row.protein}</TableCell>
+              <TableCell align="right">{row.endTime}</TableCell>
+              <TableCell align="right">{row.precipitation}</TableCell>
+              <TableCell align="right">{row.humidity}</TableCell>
+              <TableCell align="right">{row.cloudiness}</TableCell>
             </TableRow>
           ))}
         </TableBody>

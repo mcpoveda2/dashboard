@@ -6,6 +6,7 @@ import IndicatorWeather from './components/IndicatorWeather';
 import TableWeather from './components/TableWeather';
 import ControlWeather from './components/ControlWeather';
 import LineChartWeather from './components/LineChartWeather';
+import Item from './interface/item';
 
 
 import Grid from '@mui/material/Grid2' 
