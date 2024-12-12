@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -6,54 +7,56 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 
-export default function ControlWeather() {
+export default function ControlWeather({ onVariableChange }) {
+  const [selectedVariable, setSelectedVariable] = useState("-1");
 
-    {/* Arreglo de objetos */}
-    let items = [
-        {"name":"Precipitación", "description":"Cantidad de agua que cae sobre una superficie en un período específico."}, 
-        {"name": "Humedad", "description":"Cantidad de vapor de agua presente en el aire, generalmente expresada como un porcentaje."}, 
-        {"name":"Nubosidad", "description":"Grado de cobertura del cielo por nubes, afectando la visibilidad y la cantidad de luz solar recibida."}
-    ]
+  const handleChange = (event) => {
+    const value = event.target.value;
+    setSelectedVariable(value);
+    onVariableChange(value); // Notificar al componente padre sobre el cambio
+  };
 
-    {/* Arreglo de elementos JSX */}
-    let options = items.map( (item, key) => <MenuItem key={key} value={key}>{item["name"]}</MenuItem> )
+  const items = [
+    { name: "Precipitación", description: "Cantidad de agua que cae sobre una superficie en un período específico." },
+    { name: "Humedad", description: "Cantidad de vapor de agua presente en el aire, generalmente expresada como un porcentaje." },
+    { name: "Nubosidad", description: "Grado de cobertura del cielo por nubes, afectando la visibilidad y la cantidad de luz solar recibida." },
+  ];
 
-    {/* JSX */}
-    return (
-        <Paper
-            sx={{
-                p: 2,
-                display: 'flex',
-                flexDirection: 'column'
-            }}
-        >
+  const options = items.map((item, key) => (
+    <MenuItem key={key} value={item.name}>
+      {item.name}
+    </MenuItem>
+  ));
 
-            <Typography mb={2} component="h3" variant="h6" color="primary">
-                Variables Meteorológicas
-            </Typography>
+  return (
+    <Paper
+      sx={{
+        p: 2,
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
+      <Typography mb={2} component="h3" variant="h6" color="primary">
+        Variables Meteorológicas
+      </Typography>
 
-            <Box sx={{ minWidth: 120 }}>
-            
-                <FormControl fullWidth>
-                    <InputLabel id="simple-select-label">Variables</InputLabel>
-                    <Select
-                        labelId="simple-select-label"
-                        id="simple-select"
-                        label="Variables"
-                        defaultValue='-1'
-                    >
-                        <MenuItem key="-1" value="-1" disabled>Seleccione una variable</MenuItem>
-
-                        {options}
-
-                    </Select>
-                </FormControl>
-
-            </Box>
-
-
-        </Paper>
-
-
-    )
+      <Box sx={{ minWidth: 120 }}>
+        <FormControl fullWidth>
+          <InputLabel id="variable-select-label">Variable</InputLabel>
+          <Select
+            labelId="variable-select-label"
+            id="variable-select"
+            value={selectedVariable}
+            onChange={handleChange}
+            label="Variables"
+          >
+            <MenuItem key="-1" value="-1" disabled>
+              Seleccione una variable
+            </MenuItem>
+            {options}
+          </Select>
+        </FormControl>
+      </Box>
+    </Paper>
+  );
 }
