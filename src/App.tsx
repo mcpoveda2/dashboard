@@ -1,32 +1,28 @@
 import './App.css';
-import React, { useState } from 'react';
+import { useState } from 'react';
 import IndicatorWeather from './components/IndicatorWeather';
 import TableWeather from './components/TableWeather';
 import ControlWeather from './components/ControlWeather';
 import LineChartWeather from './components/LineChartWeather';
+import WeatherIndicators from './components/Indicators';
+
+
 import Grid from '@mui/material/Grid';
 
 export function App() {
   const [selectedVariable, setSelectedVariable] = useState("Sin Estado");
 
-  const handleVariableChange = (variable) => {
+  const handleVariableChange = (variable : string) => {
     setSelectedVariable(variable); // Corregido: cerrar correctamente el cuerpo de la función
   };
+
+
 
   return (
     <Grid container spacing={5}>
       {/* Indicadores */}
-      <Grid item xs={12} xl={3}>
-        <IndicatorWeather title={'Indicator 1'} subtitle={'Unidad 1'} value={"1.23"} />
-      </Grid>
-      <Grid item xs={12} xl={3}>
-        <IndicatorWeather title={'Indicator 2'} subtitle={'Unidad 2'} value={"3.12"} />
-      </Grid>
-      <Grid item xs={12} xl={3}>
-        <IndicatorWeather title={'Indicator 3'} subtitle={'Unidad 3'} value={"2.31"} />
-      </Grid>
-      <Grid item xs={12} xl={3}>
-        <IndicatorWeather title={'Indicator 4'} subtitle={'Unidad 4'} value={"3.21"} />
+      <Grid item xs={12}>
+        <WeatherIndicators />
       </Grid>
 
       {/* Tabla y Gráfico */}

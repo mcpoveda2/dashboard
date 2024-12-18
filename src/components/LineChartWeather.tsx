@@ -1,10 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Paper from '@mui/material/Paper';
 import { LineChart } from '@mui/x-charts/LineChart';
 
-export default function LineChartWeather({ variable }) {
-  const [data, setData] = useState([]);
-  const [xLabels, setXLabels] = useState([]);
+interface LineChartWeatherProps {
+  variable: string;
+}
+type WeatherVariable = 'Precipitación' | 'Humedad' | 'Nubosidad';
+
+export default function LineChartWeather({ variable }: LineChartWeatherProps) {
+  const [data, setData] = useState<number[]>([]); // Array de números
+  const [xLabels, setXLabels] = useState<string[]>([]); // Array de cadenas
 
   useEffect(() => {
     const fetchWeatherData = async () => {
@@ -32,7 +37,7 @@ export default function LineChartWeather({ variable }) {
 
         const selectedData = data.slice(-6); // Últimos 6 valores
         setXLabels(selectedData.map((item) => item.startTime));
-        setData(selectedData.map((item) => item[variable] || 0));
+        setData(selectedData.map((item) => item[variable as WeatherVariable] || 0));
       } catch (error) {
         console.error('Error fetching weather data:', error);
       }

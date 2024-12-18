@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import  { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -6,11 +6,16 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import { SelectChangeEvent } from '@mui/material';
 
-export default function ControlWeather({ onVariableChange }) {
+interface ControlWeatherProps {
+  onVariableChange: (variable: string) => void; // Función que recibe un string
+}
+
+export default function ControlWeather({ onVariableChange }: ControlWeatherProps) {
   const [selectedVariable, setSelectedVariable] = useState("-1");
 
-  const handleChange = (event) => {
+  const handleChange = (event : SelectChangeEvent) => {
     const value = event.target.value;
     setSelectedVariable(value);
     onVariableChange(value); // Notificar al componente padre sobre el cambio
