@@ -7,7 +7,7 @@ import LineChartWeather from './components/LineChartWeather';
 import Grid from '@mui/material/Grid';
 
 export function App() {
-  const [selectedVariable, setSelectedVariable] = useState("-1");
+  const [selectedVariable, setSelectedVariable] = useState("Sin Estado");
 
   const handleVariableChange = (variable) => {
     setSelectedVariable(variable); // Corregido: cerrar correctamente el cuerpo de la función
